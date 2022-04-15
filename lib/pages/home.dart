@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_core/firebase_core.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -11,10 +13,36 @@ class _HomeState extends State<Home> {
   List WorkList = [];
   String WorkElement = '';
 
+  void initFirebase() async {
+    WidgetsFlutterBinding.ensureInitialized();
+    await Firebase.initializeApp();
+  }
+
   @override
   void initState() {
-    super.initState();
+    //super.initState();
+    //initFirebase();
     WorkList.addAll(['Work 1', 'Work 2', 'Work 3']);
+  }
+
+  void MenuOpen() {
+    Navigator.of(context)
+        .push(MaterialPageRoute(builder: (BuildContext context) {
+      return Scaffold(
+          appBar: AppBar(
+            title: Text('Меню'),
+          ),
+          body: Row(
+            children: [
+              ElevatedButton(onPressed: () {
+                Navigator.pop(context);
+                Navigator.pushNamedAndRemoveUntil(
+                    context, '/', (route) => false);
+              }, child: Text('На главную'),),
+            ],
+          )
+      );
+    }));
   }
 
   @override
@@ -24,6 +52,12 @@ class _HomeState extends State<Home> {
         backgroundColor: Colors.amber,
         title: Text('Список дел'),
         centerTitle: true,
+        actions: [
+          IconButton(
+            icon: Icon(Icons.menu),
+            onPressed: MenuOpen,
+          )
+        ],
       ),
       body: ListView.builder(
           itemCount: WorkList.length,
@@ -58,20 +92,24 @@ class _HomeState extends State<Home> {
               context: context,
               builder: (BuildContext context) {
                 return AlertDialog(
-                    title: Text('Добавить херню!'),
-                    content: TextField(
-                      onChanged: (String value) {
-                        setState(() {
-                          WorkElement = value;
-                        });
-                      },
-                    ),
-                  actions: [ElevatedButton(onPressed: () {
-                    setState(() {
-                      WorkList.add(WorkElement);
-                    });
-                    Navigator.of(context).pop();
-                  }, child: Text("Сейв"))],
+                  title: Text('Добавить запись'),
+                  content: TextField(
+                    onChanged: (String value) {
+                      setState(() {
+                        WorkElement = value;
+                      });
+                    },
+                  ),
+                  actions: [
+                    ElevatedButton(
+                        onPressed: () {
+                          // FirebaseFirestore.instance.collection('items').add({
+                          //     'item': WorkElement});
+                          WorkList.add(WorkElement);
+                          Navigator.of(context).pop();
+                        },
+                        child: Text("Сейв"))
+                  ],
                 );
               });
         },
