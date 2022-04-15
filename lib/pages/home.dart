@@ -1,5 +1,5 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 
 class Home extends StatefulWidget {
@@ -7,6 +7,7 @@ class Home extends StatefulWidget {
 
   @override
   State<Home> createState() => _HomeState();
+
 }
 
 class _HomeState extends State<Home> {
@@ -30,18 +31,45 @@ class _HomeState extends State<Home> {
         .push(MaterialPageRoute(builder: (BuildContext context) {
       return Scaffold(
           appBar: AppBar(
+            backgroundColor: Colors.amber,
+            centerTitle: true,
             title: Text('Меню'),
           ),
-          body: Row(
-            children: [
-              ElevatedButton(onPressed: () {
-                Navigator.pop(context);
-                Navigator.pushNamedAndRemoveUntil(
-                    context, '/', (route) => false);
-              }, child: Text('На главную'),),
-            ],
-          )
-      );
+          body: Center(
+            child: Container(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Padding(
+                    padding: EdgeInsets.only(top: 10),
+                    child: ElevatedButton(
+                      style:
+                          ElevatedButton.styleFrom(primary: Colors.amberAccent),
+                      onPressed: () {
+                        Navigator.pop(context);
+                        Navigator.pushNamedAndRemoveUntil(
+                            context, '/', (route) => false);
+                      },
+                      child: Text('На главную', style: TextStyle(fontSize: 25),),
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(top: 10),
+                    child: ElevatedButton(
+                      style:
+                      ElevatedButton.styleFrom(primary: Colors.amberAccent),
+                      onPressed: () {
+                        Navigator.pop(context);
+                        Navigator.pushNamedAndRemoveUntil(
+                            context, '/todo', (route) => false);
+                      },
+                      child: Text('К списку', style: TextStyle(fontSize: 25),),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ));
     }));
   }
 
@@ -73,7 +101,9 @@ class _HomeState extends State<Home> {
                       color: Colors.red,
                     ),
                     onPressed: () {
-                      WorkList.removeAt(index);
+                      setState(() {
+                        WorkList.removeAt(index);
+                      });
                     },
                   ),
                 ),
@@ -103,9 +133,11 @@ class _HomeState extends State<Home> {
                   actions: [
                     ElevatedButton(
                         onPressed: () {
+                          setState(() {
+                            WorkList.add(WorkElement);
+                          });
                           // FirebaseFirestore.instance.collection('items').add({
                           //     'item': WorkElement});
-                          WorkList.add(WorkElement);
                           Navigator.of(context).pop();
                         },
                         child: Text("Сейв"))

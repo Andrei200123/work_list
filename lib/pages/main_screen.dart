@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 
 class MainScreen extends StatelessWidget {
   const MainScreen({Key? key}) : super(key: key);
@@ -12,16 +13,24 @@ class MainScreen extends StatelessWidget {
         title: Text('Список дел'),
         centerTitle: true,
       ),
-      body: Column(
-        children: [
-          Text('Главная страница'),
-          ElevatedButton(
-              onPressed: () {
-                Navigator.pushReplacementNamed(
-                    context, '/todo');
-              },
-              child: Text('Некст'))
-        ],
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Padding(padding: EdgeInsets.only(top: 10), child: Text(
+              "Здесь должно быть какое-то описание...", style: TextStyle(fontSize: 25),
+            ),),
+            Padding(
+              padding: EdgeInsets.only(top: 10),
+              child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(primary: Colors.amberAccent),
+                  onPressed: () {
+                    Navigator.pushReplacementNamed(context, '/todo');
+                  },
+                  child: Text('К списку дел')),
+            )
+          ],
+        ),
       ),
     );
   }
